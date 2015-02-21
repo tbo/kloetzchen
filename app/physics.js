@@ -11,18 +11,48 @@ world.defaultContactMaterial.contactEquationRegularizationTime = 10;
 // Static ground plane
 // Static bodies only interacts with dynamic bodies. Velocity is always zero.
 var groundShape = new CANNON.Plane();
+var groundMaterial = new CANNON.Material('groundMaterial');
 var groundBody = new CANNON.Body({
-    mass: 0  // mass=0 will produce a static body automatically
+    mass: 0,
+    material: groundMaterial // mass=0 will produce a static body automatically
 });
+
+
+var slipperyMaterial = new CANNON.Material('slipperyMaterial');
+
+var groundGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, groundMaterial, {
+    friction: 0.4,
+    restitution: 0.3,
+    contactEquationStiffness: 1e8,
+    contactEquationRegularizationTime: 3,
+    frictionEquationStiffness: 1e8,
+    frictionEquationRegularizationTime: 3
+});
+
+world.addContactMaterial(groundGroundContactMaterial);
+
+
+
+var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, slipperyMaterial, {
+    friction: 0.015,
+    restitution: 0.3,
+    contactEquationStiffness: 1e8,
+    contactEquationRegularizationTime: 3
+});
+
+world.addContactMaterial(slipperyGroundContactMaterial);
+
 groundBody.addShape(groundShape);
 world.add(groundBody);
-var box = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
+var box = new CANNON.Box(new CANNON.Vec3(1, 0.5, 5));
 
 function createCube (x, y, z) {
     var cube = new CANNON.Body({
         mass: 5, // kg
         position: new CANNON.Vec3(x, y, z), // m
+        material: slipperyMaterial
     });
+
     cube.addShape(box);
     return cube;
 }

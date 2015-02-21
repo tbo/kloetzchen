@@ -14,7 +14,7 @@ function getRandomColor() {
 }
 
 function createCube() {
-    var geometry = new THREE.BoxGeometry(1,1,1);
+    var geometry = new THREE.BoxGeometry(2,1,10);
     var material = new THREE.MeshLambertMaterial({color: getRandomColor()});
     var mesh = new THREE.Mesh(geometry, material);
     mesh.castShadow = true;
@@ -52,7 +52,7 @@ function bootstrappingObjects(bootstrapping) {
         for(var i = 0; i < bootstrapLength; i++) {
             obj = bootstrapping[i];
             switch(obj.type) {
-                case 'cube': 
+                case 'cube':
                     mesh = createCube();
                     break;
                 default:

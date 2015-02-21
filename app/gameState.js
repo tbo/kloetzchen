@@ -29,7 +29,7 @@ var gameState = {
         return this;
     }
 };
-gameState.add('cube', 0, 0, 6);
+gameState.add('cube', 0, 0, 15);
 gameState.state.player = gameState.state.bootstrapping[0];
 
 module.exports = gameState;
