@@ -149,48 +149,19 @@ function updateValue(value, update, lowerBound, upperBound) {
             newValue = lowerBound;
         }
     }
-    //console.log(newValue);
     return newValue;
 }
 
-const yawUpdate = 1;
 const pitchUpdate = 0.1;
 const pitchLowerBound = 0.1;
 const pitchDefault = 20;
 const pitchUpperBound = 30;
-//var cameraY = 0.5;
-//var cameraZ = 6;
 
 var cameraRadius = 20;
 
 function updateCameraPosition(gameState) {
     camera.up = new THREE.Vector3(0,0,1);
     camera.lookAt(new THREE.Vector3(0,0,0));
-    //camera.rotation.y = 0;
-    //camera.rotation.x = 0;
-    //camera.rotation.z = 0;
-    //camera.lookAt(gameState.player.mesh.position);
-    //camera.rotation.z = 90 / 180 * Math.PI;
-    //camera.rotation.x = 90 / 180 * Math.PI;
-    //camera.rotation.y = 90 / 180 * Math.PI;
-    //camera.rotation.y = 0;
-
-    //console.log(camera.rotation);
-
-    if (gameState.camera.yaw === undefined) {
-        gameState.camera.yaw = 0;
-    }
-    if (gameState.camera.yawLeft) {
-        gameState.camera.yaw = updateValue(gameState.camera.yaw, -yawUpdate, -180, 180);
-    }
-    if (gameState.camera.yawRight) {
-        gameState.camera.yaw = updateValue(gameState.camera.yaw, yawUpdate, -180, 180);
-    }
-    //camera.rotation.x = gameState.camera.yaw;
-    //console.log(camera.rotation.x);
-
-
-    //console.log(gameState.camera.yaw);
 
     if (gameState.camera.pitch === undefined) {
         gameState.camera.pitch = pitchDefault;
@@ -202,27 +173,9 @@ function updateCameraPosition(gameState) {
     if (gameState.camera.pitchDown) {
         gameState.camera.pitch = updateValue(gameState.camera.pitch, -pitchUpdate, pitchLowerBound, pitchUpperBound);
     }
-    //console.log(gameState.camera.pitch);
-
     camera.position.z = gameState.camera.pitch;
-    //camera.position.z = 6;
-    //camera.position.y = -10;
-    //camera.position.x = gameState.player.mesh.position.x;
-    //camera.position.x = gameState.camera.yaw;
-
     camera.position.y = -Math.cos(gameState.camera.yaw / 180 * Math.PI) * cameraRadius;
     camera.position.x = Math.sin(gameState.camera.yaw / 180 * Math.PI) * cameraRadius;
-    //camera.rotation.z = 0;
-    //camera.rotation.x = 0;
-
-    //camera.rotation.y = gameState.camera.pitch;
-    //camera.position.z = cameraZ;
-    //camera.position.y = cameraY;
-    //console.log(gameState.camera.pitch);
-
-    //camera.position.x = gameState.camera.yaw;
-    //camera.rotation.y = gameState.camera.pitch;
-    //console.log('x', gameState.player.mesh.position.x);
 }
 
 function render (gameState) {

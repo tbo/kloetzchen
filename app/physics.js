@@ -1,12 +1,12 @@
 var CANNON = require('cannon');
 
-var baseImpulse = 0.2;
+var baseImpulse = 0.1;
 const ITERATIONS_BETWEEN_SLEEP_CHECK = 20;
 const SLEEP_VELOCITY = 0.5;
 var currentIteration = 0;
 
 var world = new CANNON.World();
-world.gravity.set(0,0,-9.82);
+world.gravity.set(0,0,-5);
 world.broadphase = new CANNON.NaiveBroadphase();
 world.solver.iterations = 10;
 // world.solver.tolerance = 0.01;

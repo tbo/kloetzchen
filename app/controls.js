@@ -55,6 +55,23 @@ function onKey(v) {
     };
 }
 
+function translateMovement(gameState) {
+    console.log(gameState.camera.yaw);
+    gameState.player.movement.up = up;
+
+    if (gameState.camera.yaw >= -90 && gameState.camera.yaw < 90) {
+        gameState.player.movement.forward = forward;
+        gameState.player.movement.backward = backward;
+        gameState.player.movement.left = left;
+        gameState.player.movement.right = right;
+    } else {
+        gameState.player.movement.forward = backward;
+        gameState.player.movement.backward = forward;
+        gameState.player.movement.left = right;
+        gameState.player.movement.right = left;
+    }
+}
+
 function onMouseDown(e) {
     mouse.down = true;
     mouse.up = false;
@@ -77,6 +94,25 @@ function onMouseUp() {
     mouse.y = null;
 }
 
+function updateValue(value, update, lowerBound, upperBound) {
+    var newValue = value + update;
+    if (newValue > upperBound) {
+        if (Math.abs(lowerBound) === Math.abs(upperBound)) {
+            newValue = lowerBound;
+        } else {
+            newValue = upperBound;
+        }
+    }
+    if (newValue < lowerBound) {
+        if (Math.abs(lowerBound) === Math.abs(upperBound)) {
+            newValue = upperBound;
+        } else {
+            newValue = lowerBound;
+        }
+    }
+    return newValue;
+}
+
 document.addEventListener( 'keydown', onKey(true), false );
 document.addEventListener( 'keyup', onKey(false), false );
 window.addEventListener('mousemove', onMouseMove, false );
@@ -93,10 +129,10 @@ module.exports = function(gameState) {
     gameState.player.movement.rotateLeft = rotateLeft;
     if(gameState.controls.mouse.up) {
         mouse.up = false;
-    } 
+    }
     if(gameState.controls.mouse.down) {
         mouse.down = false;
-    } 
+    }
     gameState.controls.mouse.up = mouse.up;
     gameState.controls.mouse.down = mouse.down;
     gameState.controls.mouse.moving = mouse.moving;
@@ -105,6 +141,18 @@ module.exports = function(gameState) {
 
     gameState.camera.yawLeft = yawLeft;
     gameState.camera.yawRight = yawRight;
+
+    const yawUpdate = 1;
+    if (gameState.camera.yaw === undefined) {
+        gameState.camera.yaw = 0;
+    }
+    if (gameState.camera.yawLeft) {
+        gameState.camera.yaw = updateValue(gameState.camera.yaw, -yawUpdate, -180, 180);
+    }
+    if (gameState.camera.yawRight) {
+        gameState.camera.yaw = updateValue(gameState.camera.yaw, yawUpdate, -180, 180);
+    }
+    translateMovement(gameState);
 
     gameState.camera.pitchUp = pitchUp;
     gameState.camera.pitchDown = pitchDown;
