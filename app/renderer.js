@@ -87,12 +87,62 @@ function updatePositions(objects) {
     }
 }
 
-function render (gameState) {
-    bootstrappingObjects(gameState.bootstrapping);
-    updatePositions(gameState.objects);
+var yawUpdate = Math.PI / 180;
+var pitchUpdate = 0.1;
+var pitchLowerBound = 1;
+var pitchDefault = 6;
+var pitchUppderBound = 10;
+//var cameraY = 0.5;
+//var cameraZ = 6;
+
+function updateCameraPosition(gameState) {
     camera.position.x = gameState.player.mesh.position.x;
     camera.lookAt(gameState.player.mesh.position);
     camera.rotation.z = 0;
+
+    if (!gameState.camera.yaw) {
+        gameState.camera.yaw = 0;
+    }
+    if (gameState.camera.yawLeft) {
+        gameState.camera.yaw += yawUpdate;
+    }
+    if (gameState.camera.yawRight) {
+        gameState.camera.yaw -= yawUpdate;
+    }
+    //camera.rotation.x = gameState.camera.yaw;
+    //console.log(camera.rotation.x);
+
+    if (!gameState.camera.pitch) {
+        gameState.camera.pitch = pitchDefault;
+    }
+    if (gameState.camera.pitchUp) {
+        gameState.camera.pitch += pitchUpdate;
+        if (gameState.camera.pitch > pitchUppderBound) {
+            gameState.camera.pitch = pitchUppderBound;
+        }
+    }
+    if (gameState.camera.pitchDown) {
+        gameState.camera.pitch -= pitchUpdate;
+        if (gameState.camera.pitch < pitchLowerBound) {
+            gameState.camera.pitch = pitchLowerBound;
+        }
+    }
+
+    camera.position.z = gameState.camera.pitch;
+    //camera.rotation.y = gameState.camera.pitch;
+    //camera.position.z = cameraZ;
+    //camera.position.y = cameraY;
+    //console.log(gameState.camera.pitch);
+
+    //camera.position.x = gameState.camera.yaw;
+    //camera.rotation.y = gameState.camera.pitch;
+    //console.log('x', gameState.player.mesh.position.x);
+}
+
+function render (gameState) {
+    bootstrappingObjects(gameState.bootstrapping);
+    updatePositions(gameState.objects);
+    updateCameraPosition(gameState);
     renderer.render(scene, camera);
     removeObjects(gameState.tombstoned);
 }

@@ -31,5 +31,6 @@ var gameState = {
 };
 gameState.add('cube', 0, 0, 15);
 gameState.state.player = gameState.state.bootstrapping[0];
+gameState.camera = {};
 
 module.exports = gameState;

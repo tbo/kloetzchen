@@ -15,22 +15,28 @@ var down = false; // jshint ignore:line
 var forward = false;
 var backward = false;
 
+var yawLeft = false;
+var yawRight = false;
+
+var pitchUp = false;
+var pitchDown = false;
+
 function onKey(v) {
     return function ( event ) {
         // event.preventDefault();
         switch ( event.keyCode ) {
-            case KEYCODE_LEFT: 
+            case KEYCODE_LEFT: yawLeft = v; break;
             case KEYCODE_A: left = v; break;
 
-            case KEYCODE_RIGHT: 
+            case KEYCODE_RIGHT: yawRight = v; break;
             case KEYCODE_D: right = v; break;
 
             case KEYCODE_SPACE: up = v; break;
 
-            case KEYCODE_UP: 
+            case KEYCODE_UP: pitchUp = v; break;
             case KEYCODE_W: forward = v; break;
 
-            case KEYCODE_DOWN: 
+            case KEYCODE_DOWN: pitchDown = v; break;
             case KEYCODE_S: backward = v; break;
         }
     };
@@ -45,4 +51,13 @@ module.exports = function(gameState) {
     gameState.player.movement.backward = backward;
     gameState.player.movement.left = left;
     gameState.player.movement.right = right;
+
+    if (!gameState.camera) {
+        gameState.camera = {};
+    }
+    gameState.camera.yawLeft = yawLeft;
+    gameState.camera.yawRight = yawRight;
+
+    gameState.camera.pitchUp = pitchUp;
+    gameState.camera.pitchDown = pitchDown;
 };
