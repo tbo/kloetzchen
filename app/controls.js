@@ -41,8 +41,8 @@ function onKey(v) {
 
             case KEYCODE_RIGHT: yawRight = v; break;
             case KEYCODE_D: right = v; break;
-            case KEYCODE_E: rotateRight = v; break;
-            case KEYCODE_Q: rotateLeft = v; break;
+            case KEYCODE_E: rotateLeft = v; break;
+            case KEYCODE_Q: rotateRight = v; break;
 
             case KEYCODE_SPACE: up = v; break;
 
