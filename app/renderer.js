@@ -156,8 +156,8 @@ function updateValue(value, update, lowerBound, upperBound) {
 const yawUpdate = 1;
 const pitchUpdate = 0.1;
 const pitchLowerBound = 0.1;
-const pitchDefault = 10;
-const pitchUpperBound = 20;
+const pitchDefault = 20;
+const pitchUpperBound = 30;
 //var cameraY = 0.5;
 //var cameraZ = 6;
 
