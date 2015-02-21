@@ -5,6 +5,7 @@ var timing = require('./timing');
 var physics = require('./physics');
 var gameState = require('./gameState');
 var stateManager = require('./stateManager');
+var initialise = require('./initialise');
 
 var stats = require('stats-js')();
 // stats.setMode(1);
@@ -13,6 +14,8 @@ stats.domElement.style.left = '0px';
 stats.domElement.style.top = '0px';
 
 function echo(gameState) { if(gameState.controls.mouse.up) {console.log(gameState.controls.mouse);} } // jshint ignore:line
+
+
 
 
 function gameLoop() {
@@ -25,12 +28,13 @@ function gameLoop() {
         .pipe(renderer.render)
         .pipe(stateManager);
     stats.end();
-    requestAnimationFrame(gameLoop);  
+    requestAnimationFrame(gameLoop);
 }
 
 window.onload = function() {
     renderer.initialize();
     document.body.appendChild( stats.domElement );
     window.gameState = gameState;
+    initialise(gameState);
     gameLoop();
 };

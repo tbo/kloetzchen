@@ -1,11 +1,16 @@
 var CANNON = require('cannon');
 
 var baseImpulse = 0.2;
+const ITERATIONS_BETWEEN_SLEEP_CHECK = 20;
+const SLEEP_VELOCITY = 0.5;
+var currentIteration = 0;
 
 var world = new CANNON.World();
 world.gravity.set(0,0,-9.82);
 world.broadphase = new CANNON.NaiveBroadphase();
 world.solver.iterations = 10;
+// world.solver.tolerance = 0.01;
+
 world.defaultContactMaterial.contactEquationStiffness = 1e8;
 world.defaultContactMaterial.contactEquationRegularizationTime = 10;
 // Static ground plane
@@ -21,7 +26,7 @@ var groundBody = new CANNON.Body({
 var slipperyMaterial = new CANNON.Material('slipperyMaterial');
 
 var groundGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, groundMaterial, {
-    friction: 0.4,
+    friction: 1,
     restitution: 0.3,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 3,
@@ -34,7 +39,7 @@ world.addContactMaterial(groundGroundContactMaterial);
 
 
 var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, slipperyMaterial, {
-    friction: 0.015,
+    friction: 1,
     restitution: 0.3,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 3
@@ -42,16 +47,37 @@ var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, s
 
 world.addContactMaterial(slipperyGroundContactMaterial);
 
+var slipperySlipperyContactMaterial = new CANNON.ContactMaterial(slipperyMaterial, slipperyMaterial, {
+    friction: 0.015,
+    restitution: 0.01,
+    contactEquationStiffness: 1e8,
+    contactEquationRegularizationTime: 0.3
+});
+
+world.addContactMaterial(slipperySlipperyContactMaterial);
+
 groundBody.addShape(groundShape);
 world.add(groundBody);
-var box = new CANNON.Box(new CANNON.Vec3(1, 3, 0.5));
+var box = new CANNON.Box(new CANNON.Vec3(1.0, 3.0, 0.5));
 
-function createCube (x, y, z) {
+function createCube (x, y, z, zRotation) {
     var cube = new CANNON.Body({
-        mass: 5, // kg
-        position: new CANNON.Vec3(x, y, z), // m
-        material: slipperyMaterial
+        mass: 0.05, // kg
+        position: new CANNON.Vec3(x, y, z) // m
+        // material: slipperyMaterial
     });
+
+    cube.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 0, 1), zRotation);
+    cube.collisionResponse = true;
+    cube.allowSleep = true;
+    cube.angularDamping = 0;
+    cube.linearDamping = 0;
+    /*
+    cube.sleepSpeedLimit = 0.05;
+    cube.sleepTimeLimit = 0.03;
+    */
+
+
 
     cube.addShape(box);
     return cube;
@@ -66,7 +92,7 @@ function bootstrappingObjects(bootstrapping) {
             obj = bootstrapping[i];
             switch (obj.type) {
                 case 'cube':
-                    body = createCube(obj.initialPosition.x, obj.initialPosition.y, obj.initialPosition.z);
+                    body = createCube(obj.initialPosition.x, obj.initialPosition.y, obj.initialPosition.z, obj.initialPosition.zRotation);
                     break;
                 default:
                     console.warn('Type:', obj.type, 'unknown');
@@ -108,9 +134,31 @@ function movePlayer(player, delta) {
     }
 }
 
+
+function stopWobblingObjects(objects) {
+    for(var i = objects.length - 1; i >= 0; --i) {
+        var body = objects[i].body;
+        if (Math.abs(body.velocity.x) < SLEEP_VELOCITY && Math.abs(body.velocity.y) < SLEEP_VELOCITY && Math.abs(body.velocity.z) < SLEEP_VELOCITY) {
+            body.sleep();
+        }
+    }
+}
+
+function checkStopWobblingObjects(objects) {
+    currentIteration = (currentIteration + 1) % ITERATIONS_BETWEEN_SLEEP_CHECK;
+
+    if (!currentIteration) {
+        stopWobblingObjects(objects)
+    }
+}
+
 module.exports = function(gameState) {
     bootstrappingObjects(gameState.bootstrapping);
+    checkStopWobblingObjects(gameState.objects);
+    if (gameState.player.body.wakeUp) {
+        gameState.player.body.wakeUp();
+    }
     movePlayer(gameState.player, gameState.timing.delta);
-    world.step(1.0/60.0, gameState.timing.delta / 1000, 10);
+    world.step(1.0/60.0, gameState.timing.delta / 1000);
     removeObjects(gameState.tombstoned);
 };
