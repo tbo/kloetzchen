@@ -56,7 +56,7 @@ function onKey(v) {
 }
 
 function translateMovement(gameState) {
-    console.log(gameState.camera.yaw);
+    //console.log(gameState.camera.yaw);
     gameState.player.movement.up = up;
 
     if (gameState.camera.yaw >= -45 && gameState.camera.yaw < 45) {
