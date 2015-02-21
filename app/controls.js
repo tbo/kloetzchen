@@ -22,22 +22,28 @@ var mouse = {
     y: null
 };
 
+var yawLeft = false;
+var yawRight = false;
+
+var pitchUp = false;
+var pitchDown = false;
+
 function onKey(v) {
     return function ( event ) {
         // event.preventDefault();
         switch ( event.keyCode ) {
-            case KEYCODE_LEFT: 
+            case KEYCODE_LEFT: yawLeft = v; break;
             case KEYCODE_A: left = v; break;
 
-            case KEYCODE_RIGHT: 
+            case KEYCODE_RIGHT: yawRight = v; break;
             case KEYCODE_D: right = v; break;
 
             case KEYCODE_SPACE: up = v; break;
 
-            case KEYCODE_UP: 
+            case KEYCODE_UP: pitchUp = v; break;
             case KEYCODE_W: forward = v; break;
 
-            case KEYCODE_DOWN: 
+            case KEYCODE_DOWN: pitchDown = v; break;
             case KEYCODE_S: backward = v; break;
         }
     };
@@ -88,4 +94,10 @@ module.exports = function(gameState) {
     gameState.controls.mouse.moving = mouse.moving;
     gameState.controls.mouse.x = mouse.x;
     gameState.controls.mouse.y = mouse.y;
+
+    gameState.camera.yawLeft = yawLeft;
+    gameState.camera.yawRight = yawRight;
+
+    gameState.camera.pitchUp = pitchUp;
+    gameState.camera.pitchDown = pitchDown;
 };

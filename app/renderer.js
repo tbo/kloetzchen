@@ -133,13 +133,101 @@ function mouseInteraction(gameState) {
     }
 }
 
+function updateValue(value, update, lowerBound, upperBound) {
+    var newValue = value + update;
+    if (newValue > upperBound) {
+        if (Math.abs(lowerBound) === Math.abs(upperBound)) {
+            newValue = lowerBound;
+        } else {
+            newValue = upperBound;
+        }
+    }
+    if (newValue < lowerBound) {
+        if (Math.abs(lowerBound) === Math.abs(upperBound)) {
+            newValue = upperBound;
+        } else {
+            newValue = lowerBound;
+        }
+    }
+    //console.log(newValue);
+    return newValue;
+}
+
+const yawUpdate = 1;
+const pitchUpdate = 0.1;
+const pitchLowerBound = 0.1;
+const pitchDefault = 6;
+const pitchUpperBound = 10;
+//var cameraY = 0.5;
+//var cameraZ = 6;
+
+var cameraRadius = 10;
+
+function updateCameraPosition(gameState) {
+    camera.up = new THREE.Vector3(0,1,1);
+    camera.lookAt(new THREE.Vector3(0,0,0));
+    //camera.rotation.y = 0;
+    //camera.rotation.x = 0;
+    //camera.rotation.z = 0;
+    //camera.lookAt(gameState.player.mesh.position);
+    //camera.rotation.z = 90 / 180 * Math.PI;
+    //camera.rotation.x = 90 / 180 * Math.PI;
+    //camera.rotation.y = 90 / 180 * Math.PI;
+    //camera.rotation.y = 0;
+
+    if (gameState.camera.yaw === undefined) {
+        gameState.camera.yaw = 0;
+    }
+    if (gameState.camera.yawLeft) {
+        gameState.camera.yaw = updateValue(gameState.camera.yaw, -yawUpdate, -180, 180);
+    }
+    if (gameState.camera.yawRight) {
+        gameState.camera.yaw = updateValue(gameState.camera.yaw, yawUpdate, -180, 180);
+    }
+    //camera.rotation.x = gameState.camera.yaw;
+    //console.log(camera.rotation.x);
+
+
+    //console.log(gameState.camera.yaw);
+
+    if (gameState.camera.pitch === undefined) {
+        gameState.camera.pitch = pitchDefault;
+    }
+
+    if (gameState.camera.pitchUp) {
+        gameState.camera.pitch = updateValue(gameState.camera.pitch, pitchUpdate, pitchLowerBound, pitchUpperBound);
+    }
+    if (gameState.camera.pitchDown) {
+        gameState.camera.pitch = updateValue(gameState.camera.pitch, -pitchUpdate, pitchLowerBound, pitchUpperBound);
+    }
+    //console.log(gameState.camera.pitch);
+
+    camera.position.z = gameState.camera.pitch;
+    //camera.position.z = 6;
+    //camera.position.y = -10;
+    //camera.position.x = gameState.player.mesh.position.x;
+    //camera.position.x = gameState.camera.yaw;
+
+    camera.position.y = -Math.cos(gameState.camera.yaw / 180 * Math.PI) * cameraRadius;
+    camera.position.x = Math.sin(gameState.camera.yaw / 180 * Math.PI) * cameraRadius;
+    //camera.rotation.z = 0;
+    //camera.rotation.x = 0;
+
+    //camera.rotation.y = gameState.camera.pitch;
+    //camera.position.z = cameraZ;
+    //camera.position.y = cameraY;
+    //console.log(gameState.camera.pitch);
+
+    //camera.position.x = gameState.camera.yaw;
+    //camera.rotation.y = gameState.camera.pitch;
+    //console.log('x', gameState.player.mesh.position.x);
+}
+
 function render (gameState) {
     bootstrappingObjects(gameState.bootstrapping);
     updatePositions(gameState.objects);
     mouseInteraction(gameState);
-    camera.position.x = gameState.player.mesh.position.x;
-    camera.lookAt(gameState.player.mesh.position);
-    camera.rotation.z = 0;
+    updateCameraPosition(gameState);
     renderer.render(scene, camera);
     removeObjects(gameState.tombstoned);
 }

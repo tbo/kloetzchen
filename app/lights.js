@@ -5,6 +5,7 @@ function createHemisphereLight() {
     hemiLight.color.setHSL( 0.6, 1, 0.6 );
     hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
     hemiLight.position.set( 0, 0, 500 );
+    //hemiLight.shadowCameraVisible = true;
     return hemiLight;
 }
 
@@ -15,6 +16,7 @@ function createDirectionalLight() {
     dirLight.position.multiplyScalar( 50 );
 
     dirLight.castShadow = true;
+    //dirLight.shadowCameraVisible = true;
 
     dirLight.shadowMapWidth = 2048;
     dirLight.shadowMapHeight = 2048;

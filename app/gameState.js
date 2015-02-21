@@ -11,6 +11,7 @@ var gameState = {
     objects: [],
     bootstrapping: [],
     tombstoned: [],
+    camera: {},
     add(type, x, y, z) {
         var newObject = getObjectPrototype();
         newObject.type = type;
