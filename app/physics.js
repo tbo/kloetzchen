@@ -39,7 +39,7 @@ world.addContactMaterial(groundGroundContactMaterial);
 
 
 var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, slipperyMaterial, {
-    friction: 1,
+    friction: 0.3,
     restitution: 0.3,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 3
@@ -48,7 +48,7 @@ var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, s
 world.addContactMaterial(slipperyGroundContactMaterial);
 
 var slipperySlipperyContactMaterial = new CANNON.ContactMaterial(slipperyMaterial, slipperyMaterial, {
-    friction: 0.0,
+    friction: 0.01,
     restitution: 0.01,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 0.3
