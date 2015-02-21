@@ -156,15 +156,15 @@ function updateValue(value, update, lowerBound, upperBound) {
 const yawUpdate = 1;
 const pitchUpdate = 0.1;
 const pitchLowerBound = 0.1;
-const pitchDefault = 6;
-const pitchUpperBound = 10;
+const pitchDefault = 10;
+const pitchUpperBound = 20;
 //var cameraY = 0.5;
 //var cameraZ = 6;
 
-var cameraRadius = 10;
+var cameraRadius = 20;
 
 function updateCameraPosition(gameState) {
-    camera.up = new THREE.Vector3(0,1,1);
+    camera.up = new THREE.Vector3(0,0,1);
     camera.lookAt(new THREE.Vector3(0,0,0));
     //camera.rotation.y = 0;
     //camera.rotation.x = 0;
@@ -175,7 +175,7 @@ function updateCameraPosition(gameState) {
     //camera.rotation.y = 90 / 180 * Math.PI;
     //camera.rotation.y = 0;
 
-    console.log(camera.rotation);
+    //console.log(camera.rotation);
 
     if (gameState.camera.yaw === undefined) {
         gameState.camera.yaw = 0;
