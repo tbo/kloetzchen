@@ -44,7 +44,7 @@ world.addContactMaterial(slipperyGroundContactMaterial);
 
 groundBody.addShape(groundShape);
 world.add(groundBody);
-var box = new CANNON.Box(new CANNON.Vec3(1, 0.5, 5));
+var box = new CANNON.Box(new CANNON.Vec3(1, 3, 0.5));
 
 function createCube (x, y, z) {
     var cube = new CANNON.Body({
@@ -110,6 +110,6 @@ function movePlayer(player) {
 module.exports = function(gameState) {
     bootstrappingObjects(gameState.bootstrapping);
     movePlayer(gameState.player);
-    world.step(1.0/60.0, gameState.timing.delta / 1000, 3);
+    world.step(1.0/60.0, gameState.timing.delta / 1000);
     removeObjects(gameState.tombstoned);
 };

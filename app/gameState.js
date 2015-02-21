@@ -1,7 +1,7 @@
 function getObjectPrototype() {
     return {
-        position: {},
-        rotation: {},
+        mesh: null,
+        body: null,
         movement: {}
     };
 }

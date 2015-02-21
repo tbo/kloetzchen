@@ -68,10 +68,10 @@ gulp.task('clean', function () {
     return gulp.src(['.tmp', 'dist'], { read: false }).pipe($.clean());
 });
 
-gulp.task('build', ['html', 'images', 'extras']);
+gulp.task('build', ['html', /* 'images',*/ 'extras']);
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('build');
+    gulp.start('watch');
 });
 
 gulp.task('connect', function () {
