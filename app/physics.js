@@ -148,7 +148,7 @@ function checkStopWobblingObjects(objects) {
     currentIteration = (currentIteration + 1) % ITERATIONS_BETWEEN_SLEEP_CHECK;
 
     if (!currentIteration) {
-        stopWobblingObjects(objects)
+        stopWobblingObjects(objects);
     }
 }
 
