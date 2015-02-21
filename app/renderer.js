@@ -16,7 +16,7 @@ function getRandomColor() {
 
 function createCube() {
     var geometry = new THREE.BoxGeometry(2,6,1);
-    var material = new THREE.MeshLambertMaterial({color: getRandomColor(), opacity: 0.1});
+    var material = new THREE.MeshLambertMaterial({color: getRandomColor()});
     var mesh = new THREE.Mesh(geometry, material);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -39,7 +39,7 @@ scene.add( ground );
 
 ground.receiveShadow = true;
 camera.position.z = 6;
-camera.position.y = -10;
+camera.position.y = -30;
 renderer.gammaInput = true;
 renderer.gammaOutput = true;
 
