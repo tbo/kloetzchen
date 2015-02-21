@@ -59,11 +59,21 @@ function translateMovement(gameState) {
     console.log(gameState.camera.yaw);
     gameState.player.movement.up = up;
 
-    if (gameState.camera.yaw >= -90 && gameState.camera.yaw < 90) {
+    if (gameState.camera.yaw >= -45 && gameState.camera.yaw < 45) {
         gameState.player.movement.forward = forward;
         gameState.player.movement.backward = backward;
         gameState.player.movement.left = left;
         gameState.player.movement.right = right;
+    } else if (gameState.camera.yaw >= 45 && gameState.camera.yaw < 135) {
+        gameState.player.movement.forward = right;
+        gameState.player.movement.backward = left;
+        gameState.player.movement.left = forward;
+        gameState.player.movement.right = backward;
+    } else if (gameState.camera.yaw <= -45 && gameState.camera.yaw > -135) {
+        gameState.player.movement.forward = left;
+        gameState.player.movement.backward = right;
+        gameState.player.movement.left = backward;
+        gameState.player.movement.right = forward;
     } else {
         gameState.player.movement.forward = backward;
         gameState.player.movement.backward = forward;
