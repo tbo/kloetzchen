@@ -48,7 +48,7 @@ var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, s
 world.addContactMaterial(slipperyGroundContactMaterial);
 
 var slipperySlipperyContactMaterial = new CANNON.ContactMaterial(slipperyMaterial, slipperyMaterial, {
-    friction: 0.015,
+    friction: 0.0,
     restitution: 0.01,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 0.3
@@ -63,8 +63,8 @@ var box = new CANNON.Box(new CANNON.Vec3(1.0, 3.0, 0.5));
 function createCube (x, y, z, zRotation) {
     var cube = new CANNON.Body({
         mass: 0.05, // kg
-        position: new CANNON.Vec3(x, y, z) // m
-        // material: slipperyMaterial
+        position: new CANNON.Vec3(x, y, z), // m
+        material: slipperyMaterial
     });
 
     cube.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 0, 1), zRotation);
