@@ -175,6 +175,8 @@ function updateCameraPosition(gameState) {
     //camera.rotation.y = 90 / 180 * Math.PI;
     //camera.rotation.y = 0;
 
+    console.log(camera.rotation);
+
     if (gameState.camera.yaw === undefined) {
         gameState.camera.yaw = 0;
     }
