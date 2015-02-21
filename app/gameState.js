@@ -7,15 +7,15 @@ function getObjectPrototype() {
 }
 
 var gameState = {
-        
+
         controls: {mouse: {}},
         objects: [],
         bootstrapping: [],
         tombstoned: [],
-        player: { movement: {}, body: {}, mesh: { position: {x:0, y:0, z: 0} } }
+        player: { movement: {}, body: {}, mesh: { position: {x:0, y:0, z: 0} } },
         camera: {},
-   
- 
+
+
     add(type, x, y, z) {
         var newObject = getObjectPrototype();
         newObject.type = type;
@@ -26,7 +26,7 @@ var gameState = {
         var newObject = getObjectPrototype();
         newObject.type = 'cube';
         newObject.initialPosition = position;
-        return this.state.bootstrapping.push(newObject) - 1;
+        return this.bootstrapping.push(newObject) - 1;
     },
     remove(index) {
         return this.tombstoned.push(this.objects.splice(index, 1).pop()) - 1;

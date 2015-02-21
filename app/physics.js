@@ -116,7 +116,7 @@ function removeObjects(tombstoned) {
 function movePlayer(player, delta) {
     var velocity = player.body.velocity,
         movement = player.movement,
-        relativImpulse = baseImpulse * delta;
+        relativeImpulse = baseImpulse * delta;
     if (movement.forward) {
         velocity.y = relativeImpulse;
     }
@@ -154,8 +154,11 @@ function checkStopWobblingObjects(objects) {
 
 module.exports = function(gameState) {
     bootstrappingObjects(gameState.bootstrapping);
-    movePlayer(gameState.player, gameState.timing.delta);
     checkStopWobblingObjects(gameState.objects);
+    if (gameState.player.body.wakeUp) {
+        gameState.player.body.wakeUp();
+    }
+    movePlayer(gameState.player, gameState.timing.delta);
     world.step(1.0/60.0, gameState.timing.delta / 1000);
     removeObjects(gameState.tombstoned);
 };
