@@ -124,13 +124,20 @@ function movePlayer(player, delta) {
         velocity.y = -relativeImpulse ;
     }
     if (movement.up) {
-        velocity.z = relativeImpulse ;
+        velocity.z = relativeImpulse;
+        player.body.angularVelocity.set(0, 0, 0);
     }
     if (movement.right) {
         velocity.x = relativeImpulse ;
     }
     if (movement.left) {
         velocity.x = -relativeImpulse ;
+    }
+    if (movement.rotateRight) {
+        player.body.quaternion.z -= 0.001 * delta;
+    }
+    if (movement.rotateLeft) {
+        player.body.quaternion.z += 0.001 * delta;
     }
 }
 

@@ -7,9 +7,13 @@ var KEYCODE_W = 87;
 var KEYCODE_UP = 38;
 var KEYCODE_A = 65;
 var KEYCODE_D = 68;
+var KEYCODE_E = 69;
+var KEYCODE_Q = 81;
 
 var left = false;
 var right = false;
+var rotateLeft = false;
+var rotateRight = false;
 var up = false;
 var down = false; // jshint ignore:line
 var forward = false;
@@ -37,6 +41,8 @@ function onKey(v) {
 
             case KEYCODE_RIGHT: yawRight = v; break;
             case KEYCODE_D: right = v; break;
+            case KEYCODE_E: rotateRight = v; break;
+            case KEYCODE_Q: rotateLeft = v; break;
 
             case KEYCODE_SPACE: up = v; break;
 
@@ -83,6 +89,8 @@ module.exports = function(gameState) {
     gameState.player.movement.backward = backward;
     gameState.player.movement.left = left;
     gameState.player.movement.right = right;
+    gameState.player.movement.rotateRight = rotateRight;
+    gameState.player.movement.rotateLeft = rotateLeft;
     if(gameState.controls.mouse.up) {
         mouse.up = false;
     } 
