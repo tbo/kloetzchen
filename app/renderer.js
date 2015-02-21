@@ -1,7 +1,8 @@
 'use strict';
-var THREE = require('three');
+var THREE = require('./three.min.js');
 var lights = require('./lights');
 var scene = new THREE.Scene();
+var raycaster = new THREE.Raycaster();
 
 function addLights() {
     for(var index in lights) {
@@ -87,9 +88,55 @@ function updatePositions(objects) {
     }
 }
 
+// Function that returns a raycaster to use to find intersecting objects
+// in a scene given screen pos and a camera, and a projector
+function getRayCasterFromScreenCoord (screenX, screenY, camera) {
+    var mouse3D = new THREE.Vector3();
+    // Get 3D point form the client x y
+    mouse3D.x = (screenX / window.innerWidth) * 2 - 1;
+    mouse3D.y = -(screenY / window.innerHeight) * 2 + 1;
+    mouse3D.z = 0.5;
+    raycaster.setFromCamera( mouse3D, camera );
+}
+
+
+function findNearestIntersectingObject(clientX,clientY,camera,objects) {
+    // Get the picking ray from the point
+    getRayCasterFromScreenCoord(clientX, clientY, camera);
+
+    // Find the closest intersecting object
+    // Now, cast the ray all render objects in the scene to see if they collide. Take the closest one.
+    var hits = raycaster.intersectObjects(objects);
+    if (hits.length > 0) {
+        return hits[0];
+    }
+    return hits;
+}
+
+function mouseInteraction(gameState) {
+    var mouse = gameState.controls.mouse;
+    var objects = gameState.objects;
+    if(mouse.down) {
+        var hit = findNearestIntersectingObject(
+            mouse.x,
+            mouse.y,
+            camera,
+            objects.map(function (o) {return o.mesh;})
+        );
+        objects.some(function (o, index) {
+            if(o.mesh === hit.object) {
+                gameState.assumeControl(index);
+                return true;
+            }
+            return false;
+        });
+    }
+}
+
 function render (gameState) {
     bootstrappingObjects(gameState.bootstrapping);
     updatePositions(gameState.objects);
+    mouseInteraction(gameState);
     camera.position.x = gameState.player.mesh.position.x;
     camera.lookAt(gameState.player.mesh.position);
     camera.rotation.z = 0;

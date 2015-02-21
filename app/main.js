@@ -12,7 +12,7 @@ stats.domElement.style.position = 'absolute';
 stats.domElement.style.left = '0px';
 stats.domElement.style.top = '0px';
 
-function echo(gameState) { console.log(gameState.player.body.position); } // jshint ignore:line
+function echo(gameState) { if(gameState.controls.mouse.up) {console.log(gameState.controls.mouse);} } // jshint ignore:line
 
 
 function gameLoop() {

@@ -14,6 +14,13 @@ var up = false;
 var down = false; // jshint ignore:line
 var forward = false;
 var backward = false;
+var mouse = {
+    down: false,
+    up: false,
+    moving: false,
+    x: null,
+    y: null
+};
 
 function onKey(v) {
     return function ( event ) {
@@ -36,8 +43,33 @@ function onKey(v) {
     };
 }
 
+function onMouseDown(e) {
+    mouse.down = true;
+    mouse.up = false;
+    mouse.moving = true;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+}
+
+function onMouseMove(e) {
+    mouse.moving = true;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+}
+
+function onMouseUp() {
+    mouse.down = false;
+    mouse.up = true;
+    mouse.moving = false;
+    mouse.x = null;
+    mouse.y = null;
+}
+
 document.addEventListener( 'keydown', onKey(true), false );
 document.addEventListener( 'keyup', onKey(false), false );
+window.addEventListener('mousemove', onMouseMove, false );
+window.addEventListener('mousedown', onMouseDown, false );
+window.addEventListener('mouseup', onMouseUp, false );
 
 module.exports = function(gameState) {
     gameState.player.movement.up = up;
@@ -45,4 +77,15 @@ module.exports = function(gameState) {
     gameState.player.movement.backward = backward;
     gameState.player.movement.left = left;
     gameState.player.movement.right = right;
+    if(gameState.controls.mouse.up) {
+        mouse.up = false;
+    } 
+    if(gameState.controls.mouse.down) {
+        mouse.down = false;
+    } 
+    gameState.controls.mouse.up = mouse.up;
+    gameState.controls.mouse.down = mouse.down;
+    gameState.controls.mouse.moving = mouse.moving;
+    gameState.controls.mouse.x = mouse.x;
+    gameState.controls.mouse.y = mouse.y;
 };

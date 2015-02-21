@@ -16,7 +16,7 @@ var errLog = function (err) {
 };
 
 gulp.task('scripts', function () {
-    return gulp.src('app/**/*.js')
+    return gulp.src(['app/**/*.js', '!app/three.min.js'])
         .pipe($.jshint())
         .pipe($.jshint.reporter(require('jshint-stylish')));
 });

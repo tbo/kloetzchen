@@ -1,4 +1,4 @@
-var THREE = require('three');
+var THREE = require('./three.min.js');
 
 function createHemisphereLight() {
     var hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
