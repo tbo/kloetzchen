@@ -8,8 +8,9 @@ var currentIteration = 0;
 var world = new CANNON.World();
 world.gravity.set(0,0,-5);
 world.broadphase = new CANNON.NaiveBroadphase();
-world.solver.iterations = 10;
 // world.solver.tolerance = 0.01;
+world.solver.iterations = 200;
+world.solver.tolerance = 0.0;
 
 world.defaultContactMaterial.contactEquationStiffness = 1e8;
 world.defaultContactMaterial.contactEquationRegularizationTime = 10;
@@ -27,7 +28,7 @@ var slipperyMaterial = new CANNON.Material('slipperyMaterial');
 
 var groundGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, groundMaterial, {
     friction: 1,
-    restitution: 0.3,
+    restitution: 0,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 3,
     frictionEquationStiffness: 1e8,
@@ -40,7 +41,7 @@ world.addContactMaterial(groundGroundContactMaterial);
 
 var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, slipperyMaterial, {
     friction: 0.3,
-    restitution: 0.3,
+    restitution: 0.0,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 3
 });
@@ -48,8 +49,8 @@ var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, s
 world.addContactMaterial(slipperyGroundContactMaterial);
 
 var slipperySlipperyContactMaterial = new CANNON.ContactMaterial(slipperyMaterial, slipperyMaterial, {
-    friction: 0.01,
-    restitution: 0.01,
+    friction: 0.05,
+    restitution: 0.0,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 0.3
 });
@@ -165,7 +166,7 @@ function checkStopWobblingObjects(objects) {
 
 module.exports = function(gameState) {
     bootstrappingObjects(gameState.bootstrapping);
-    checkStopWobblingObjects(gameState.objects);
+    //checkStopWobblingObjects(gameState.objects);
     if (gameState.player.body.wakeUp) {
         gameState.player.body.wakeUp();
     }
