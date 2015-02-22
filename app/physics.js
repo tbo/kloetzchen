@@ -6,7 +6,7 @@ const SLEEP_VELOCITY = 0.5;
 var currentIteration = 0;
 
 var world = new CANNON.World();
-world.gravity.set(0,0,-5);
+world.gravity.set(0,0,-9);
 world.broadphase = new CANNON.NaiveBroadphase();
 // world.solver.tolerance = 0.01;
 world.solver.iterations = 200;
@@ -49,7 +49,7 @@ var slipperyGroundContactMaterial = new CANNON.ContactMaterial(groundMaterial, s
 world.addContactMaterial(slipperyGroundContactMaterial);
 
 var slipperySlipperyContactMaterial = new CANNON.ContactMaterial(slipperyMaterial, slipperyMaterial, {
-    friction: 0.05,
+    friction: 0.03,
     restitution: 0.0,
     contactEquationStiffness: 1e8,
     contactEquationRegularizationTime: 0.3
